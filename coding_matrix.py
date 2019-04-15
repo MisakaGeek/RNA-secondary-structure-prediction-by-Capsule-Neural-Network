@@ -7,12 +7,12 @@ Created on Mon Apr 15 20:16:47 2019
 import math
 import numpy as np
 import random
-
+import input_and_process_data as ipd
 
 # 调用方法：variable_name = code_matrices(nums, bases, matches)
 """运行方法:
 PATH = "./src/"  # 规定.ct文件位置
-nums, bases, matches = Get_Batch_Data(PATH)  # 获得RNA序列信息
+nums, bases, matches = ipd.Get_Batch_Data(PATH)  # 获得RNA序列信息
 result = code_matrices(nums, bases, matches)  # 获得矩阵
 print(result)  # result即可作为PATH文件夹下所有RNA序列的编码矩阵
 """
