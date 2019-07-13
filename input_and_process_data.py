@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Apr  8 19:36:24 2019
-
 @author: 雷浩洁
 """
 
@@ -25,7 +24,7 @@ def Get_Batch_Data(filepath):
     pathDir=os.listdir(filepath)
     nums=[]#保存第一列序列信息，格式为int,每一个元素都是一个列表，保存一条序列的信息
     bases=[]#保存第二列碱基序列信息，为ACGU字符串,每一个元素都是一个列表，保存一条序列的信息
-    matchs=[]#保存第五列配对信息，格式为int,每一个元素都是一个列表，保存一条序列的信息
+    matches=[]#保存第五列配对信息，格式为int,每一个元素都是一个列表，保存一条序列的信息
     for file_name in pathDir:
         f=codecs.open(filepath+str(file_name),mode='r')#打开一个文件
         
@@ -48,31 +47,51 @@ def Get_Batch_Data(filepath):
         #去除无用数据
         num.remove(num[0])
         base.remove(base[0])
-        match.remove(match[0])
+       # match.remove(match[0])#找到BUG，错误地删除了第五列的第一个元素
         
         #添加到大列表中
         nums.append(num)
         bases.append(base)
-        matchs.append(match)
+        matches.append(match)
         
         f.close()
-    return nums,bases,matchs
+    return nums,bases,matches
 
 
-PATH="All_Clearn_Data/"#想要读取的文件的文件名
-nums,bases,matchs=Get_Batch_Data(PATH)#调用方式
 
 
-"""
-#测试用
-print(nums[0])
-print(bases[0])
-print(matchs[0])
-print("...")
-print("...")
-print("...")
-print(nums[1000])
-print(bases[1000])
-print(matchs[1000])
-"""
+
+
+def Change_to_String(nums,bases,matches):
+    """
+    将得到的RNA序列信息转化为点括号表示法
+    输入为三条列表
+    nums:保存所有的RNA序列信息，列表的每一个元素是一个RNA的序列信息
+    bases:保存所有的RNA碱基信息,列表的每一个元素是一个RNA的碱基信息
+    matchs:保存所有的RNA配对信息,列表的每一个元素是一个RNA的对应碱基的配对信息
+    
+    输出为两条列表，分别为：
+    bases:保存所有的RNA碱基信息，列表的每一个元素是一个RNA的碱基信息
+    stus:保存所有的点括号序列信息，列表的每一个元素stu是一个RNA的点括号序列信息
+    """
+    stus=[]
+    for rna in range(len(nums)):#rna为索引，代表了每一条RNA的索引值
+        num=nums[rna]
+        base=bases[rna]
+        match=matches[rna]
+        stu=[]
+        for i in range(len(base)):
+            if match[i]=='0':#当前碱基没有配对
+                stu.append('.')
+            else:
+                if int(num[i])>int(match[i]):#配对的后一个碱基，用‘）’表示
+                    stu.append(')')
+                else:              #配对的前一个碱基，用‘（’表示                    
+                    stu.append('(')
+        stus.append(stu)
         
+    return bases,stus
+
+
+#测试
+
