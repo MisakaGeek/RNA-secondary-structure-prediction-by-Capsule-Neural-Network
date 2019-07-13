@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Apr  8 19:36:24 2019
-
 @author: 雷浩洁
 """
 
@@ -96,6 +95,8 @@ def Change_to_String(nums,bases,matches):
 
 #测试
 
+<<<<<<< HEAD
+=======
 PATH="test/"#想要读取的文件的文件名
 nums,bases,matches=Get_Batch_Data(PATH)#调用方式
 bases,stus=Change_to_String(nums,bases,matches)
@@ -119,3 +120,4 @@ bases,stus=Change_to_String(nums,bases,matches)
     
     
         
+>>>>>>> ea047d09e477f67df32c41dcd901e124e88ade74
