@@ -75,18 +75,18 @@ def Change_to_String(nums,bases,matches):
     stus:保存所有的点括号序列信息，列表的每一个元素stu是一个RNA的点括号序列信息
     """
     stus=[]
-    for rna in range(len(nums)):#rna为索引，代表了每一条RNA的索引值
+    for rna in range(len(nums)):  # rna为索引，代表了每一条RNA的索引值
         num=nums[rna]
         base=bases[rna]
         match=matches[rna]
         stu=[]
         for i in range(len(base)):
-            if match[i]=='0':#当前碱基没有配对
+            if match[i]=='0':  # 当前碱基没有配对
                 stu.append('.')
             else:
-                if int(num[i])>int(match[i]):#配对的后一个碱基，用‘）’表示
+                if int(num[i])>int(match[i]):# 配对的后一个碱基，用‘）’表示
                     stu.append(')')
-                else:              #配对的前一个碱基，用‘（’表示                    
+                else:                # 配对的前一个碱基，用‘（’表示
                     stu.append('(')
         stus.append(stu)
         
@@ -94,12 +94,18 @@ def Change_to_String(nums,bases,matches):
 
 
 #测试
+'''
+if __name__ == "__main__":
+    PATH="Cleaned_5sRNA_test/"
+    nums,bases,matches=Get_Batch_Data(PATH)#调用方式
+    bases,stus=Change_to_String(nums,bases,matches)
 
-<<<<<<< HEAD
-=======
-PATH="test/"#想要读取的文件的文件名
-nums,bases,matches=Get_Batch_Data(PATH)#调用方式
-bases,stus=Change_to_String(nums,bases,matches)
+    Bases=np.array(bases)
+    Stus=np.array(stus)
+    print(Bases[0])
+    print(Bases[1])
+    print(Bases[2])
+'''
 
 
     
@@ -118,6 +124,4 @@ bases,stus=Change_to_String(nums,bases,matches)
     
     
     
-    
-        
->>>>>>> ea047d09e477f67df32c41dcd901e124e88ade74
+

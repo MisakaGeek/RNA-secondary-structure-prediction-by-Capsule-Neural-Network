@@ -6,6 +6,78 @@ Created on Mon Apr 15 20:16:47 2019
 import math
 import numpy as np
 import random
+import input_and_process_data as ipd
+import data_same_size as dss
+import tensorflow as tf
+
+
+
+
+
+
+def get_Data(PATH, row=19, column=128):
+    """
+    获取数据集
+    将数据预处理部分的代码整合到一起
+    只需调用这个函数，输入路径与想要设置的矩阵大小，就能返回符合要求的，所有的数据集
+    :param PATH:读取的数据文件路径名
+    :param row:滑窗大小，控制矩阵的行值
+    :param column:归一化大小，控制矩阵列值
+    :return:inputs:所有数据集，维度为[size,19,128,1]
+            labels: 所有标签集，还未经过ONE-HOT编码，维度为[size]
+    """
+    # 将ct文件1、2、5行读入 对应返回值三个列表
+    nums, bases1, matches = ipd.Get_Batch_Data(PATH)
+    # 点括号序列转化 返回两个列表（此时stus是二维列表，是区分rna的）
+    bases, stus = ipd.Change_to_String(nums, bases1, matches)
+    print("读入数据完成！")
+
+    # 整合标签集
+    # label为最终输出的点括号序列列表
+    label = []
+    # 将label整合为一维列表，可以作为神经网络的标签集
+    for i in range(len(stus)):
+        label = label + stus[i]
+    label = np.array(label)
+    labels= []
+    for i in range(len(label)):
+        if label[i]=='(':
+            labels.append(0)  # 将 ( 编码为0
+        elif label[i] == '.':
+            labels.append(1)  # 将 . 编码为1
+        elif label[i] == ')':
+            labels.append(2)  # 将 ) 编码为2
+    print("转化标签完成！")
+
+    # result为从ct到最终统一大小的矩阵列表
+    result = []
+    # 转化为矩阵
+    result = coding_matrix(bases)  # ([['A','G','C','C','G','U']])
+    # result[0][0]对应第一个rna的第一个矩阵 长度应该是rna的length
+    print("矩阵转换完成！")
+
+    # 调用滑窗算法，统一所有矩阵行数为19（超参数可修改）
+    result = dss.slide_window(result, row=row)
+    # 为每个rna开头结尾各补了9行0 所以result[x][0~9]应该都是0行开头
+    print("滑窗算法完成！")
+
+
+
+    # 调用归一化，统一所有矩阵列数为128（超参数可修改）
+    result = dss.same_size(result, column=column)
+    print("归一化完成！")
+
+    # 将inputs转化为np.array类型数据
+    inputs = np.array(result)
+    # 加上管道维度，inputs已经可以作为神经网络输入了
+    inputs = inputs.reshape(len(inputs), row, column, 1)
+    assert (inputs.shape==(len(inputs), row, column, 1))
+
+    return inputs, labels
+
+
+
+
 
 # 调用方法：variable_name = coding_matrix(bases)
 """运行方法：
@@ -14,7 +86,8 @@ import input_and_process_data as ipd
 import data_same_size as dss
 import coding_matrix as cm
 
-np.set_printoptions(threshold=np.inf, formatter={'float': '{:.1f}'.format}) # 这行的意义是输出时不丢失数据（无省略号），且规定输出的数据小数点后位数为1（改变主函数位置时别忘了也加上这一行）
+np.set_printoptions(threshold=np.inf, formatter={'float': '{:.1f}'.format}) 
+# 这行的意义是输出时不丢失数据（无省略号），且规定输出的数据小数点后位数为1（改变主函数位置时别忘了也加上这一行）
 
 # 下一行需要手动修改
 PATH = "/"  # 规定.ct文件位置，注意最后应该有一个分隔符，因为内部调用时直接在PATH后append文件名，所以应在PATH里预先准备好分隔符
@@ -132,3 +205,12 @@ def init_value(base, i, j, U_G_Weight = 0.8):
             return U_G_Weight
         else:
             return 0
+
+
+
+
+if __name__ == "__main__":
+    PATH = "Cleaned_5sRNA_test/"
+    row = 19
+    column = 128
+    train_X, train_Y=get_Data(PATH,row,column)
