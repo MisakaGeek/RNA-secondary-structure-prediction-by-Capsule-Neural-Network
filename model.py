@@ -10,12 +10,6 @@ Created on Thu May 16 18:20:27 2019
 import numpy as np
 import tensorflow as tf
 
-
-
-# Y = tf.one_hot(labels, depth=num_outputs, axis=1, dtype=tf.float32)
-
-
-
 def squash(vector):
     """
     压缩操作，将一个向量的长度压缩到1以内，并不损坏其特征
@@ -59,8 +53,7 @@ def routing(input,b_IJ,num_outputs=3,num_dims=4):
     参数W的维度:[1, num_caps_i, num_caps_j*len_v_j, len_u_j, 1]
     """
     input_shape = input.get_shape()
-    print(input_shape)
-        #tf.get_shape(input)
+
     W=tf.get_variable('Weight',
                       shape=[1, input_shape[1], num_dims*num_outputs, 2, 1],
                       dtype=tf.float32,
@@ -225,8 +218,6 @@ def interface(inputs,Y,batch_size,vec_len,temp_batch_size):
                                                  activation_fn=tf.sigmoid)
     return logits, v_length
 
-
-    
 def loss(logits,v_length,labels,Y,temp_batch_size):
     """
     #定义损失函数
