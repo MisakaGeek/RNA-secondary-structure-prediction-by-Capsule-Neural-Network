@@ -34,7 +34,6 @@ def same_size(matrix, column):
         matrix[x] = (np.asarray(image))  # 将图像转化回矩阵 即可得到大小一致的矩阵
     return matrix
 
-
 """
 np.set_printoptions(threshold=np.inf, formatter={'float': '{:.1f}'.format})
 bases = ['A','G','C','C','G','U']
@@ -45,4 +44,3 @@ fina = np.array(result)
 fina = fina.reshape(len(fina), 19, 128, 1)
 print(fina)
 """
-

@@ -24,7 +24,6 @@ def run_trainning():
     """
     对神经网络进行训练
     """
-
     PATH = "Cleaned_5sRNA_test/"
     logs_train_dir="Net_model/"  # 保存训练得来的模型的文件夹
     row = 19
@@ -36,7 +35,6 @@ def run_trainning():
                                   column=column)
 
     train_X, train_Y, one_hot_train_Y = gbd.get_batch_data(inputs,Labels, batch_size=temp_batch_size)
-
 
     train_logits,train_v_length=model.interface(inputs=train_X,
                                                 Y=one_hot_train_Y,
@@ -84,37 +82,5 @@ def run_trainning():
     coord.join(threads)
     sess.close()
     
-
 if __name__ == "__main__":
     run_trainning()
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

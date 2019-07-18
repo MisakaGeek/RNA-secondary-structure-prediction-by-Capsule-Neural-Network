@@ -11,7 +11,6 @@ import os
 
 result_list = [] # n*3大小的二维list，n行代表输入的ct文件有n个碱基，3代表每个碱基应该是左括号，右括号，点的概率
 test_data_path = '/' # 存放测试集ct文件的文件夹，应有许多子文件夹，以保证每个子文件夹内只有一个ct文件
-test_result_path = '/' # 存放result_list的csv文件的文件夹
 
 testDir = os.listdir(test_data_path)
 testDir.sort()

@@ -28,7 +28,6 @@ def get_Data(PATH, row=19, column=128):
     # 点括号序列转化 返回两个列表（此时stus是二维列表，是区分rna的）
     bases, stus = ipd.Change_to_String(nums, bases1, matches)
     print("读入数据完成！")
-
     # 整合标签集
     # label为最终输出的点括号序列列表
     label = []
@@ -45,33 +44,25 @@ def get_Data(PATH, row=19, column=128):
         elif label[i] == ')':
             labels.append(2)  # 将 ) 编码为2
     print("转化标签完成！")
-
     # result为从ct到最终统一大小的矩阵列表
     result = []
     # 转化为矩阵
     result = cm.coding_matrix(bases)  # ([['A','G','C','C','G','U']])
     # result[0][0]对应第一个rna的第一个矩阵 长度应该是rna的length
     print("矩阵转换完成！")
-
     # 调用滑窗算法，统一所有矩阵行数为19（超参数可修改）
     result = dss.slide_window(result, row=row)
     # 为每个rna开头结尾各补了9行0 所以result[x][0~9]应该都是0行开头
     print("滑窗算法完成！")
-
-
-
     # 调用归一化，统一所有矩阵列数为128（超参数可修改）
     result = dss.same_size(result, column=column)
     print("归一化完成！")
-
     # 将inputs转化为np.array类型数据
     inputs = np.array(result)
     # 加上管道维度，inputs已经可以作为神经网络输入了
     inputs = inputs.reshape(len(inputs), row, column, 1)
     assert (inputs.shape==(len(inputs), row, column, 1))
-
     return inputs, labels
-
 
 def get_batch_data(images, labels, batch_size=256):
     """
@@ -85,7 +76,6 @@ def get_batch_data(images, labels, batch_size=256):
         label_batch: which shape is [batch_size, ]
         one_hot_label_batch: which shape is [batch_size, 3]
     """
-
     # 数据类型转换为tf.float32
     images = tf.cast(images, tf.float32)
     labels = tf.cast(labels, tf.int32)

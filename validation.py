@@ -61,4 +61,5 @@ def evaluate():
                 coord.request_stop()
                 coord.join(threads)
 
-evaluate()
+if __name__ == "__main__":
+    evaluate()
