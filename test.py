@@ -21,7 +21,7 @@ for ct in testDir: # ct是文件夹，内部有且仅有一个.ct格式的碱基
     result_list = vob.evaluate_one_base(ct)
     name = ['left','right','point']
     possibility = pd.DataFrame(columns = name, data = result_list)
-    possibility.to_csv(os.getcwd() + '/' + ct + "possibility.csv") # possibility.csv保存各个位置是左括号，右括号，点的概率
+    possibility.to_csv(os.getcwd() + '\\' + ct + "\\possibility.csv") # possibility.csv保存各个位置是左括号，右括号，点的概率
     result = []
     for index, row in possibility.iterrows():
         if row["left"] >= row["right"] and row["left"] >= row["point"]:
