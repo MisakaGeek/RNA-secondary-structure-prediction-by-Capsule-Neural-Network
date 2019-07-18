@@ -14,6 +14,7 @@ ROW = 19
 COLUMN = 128
 BATCH_SIZE = 1
 VEC_LEN = 8
+logs_train_dir = "" # 训练日志文件夹
 
 def evaluate_one_base(ct):
     """
@@ -33,7 +34,15 @@ def evaluate_one_base(ct):
                                                 temp_batch_size = BATCH_SIZE)
         softmax = tf.nn.softmax(train_logits,dim=-1,name=None)   
         saver = tf.train.Saver(tf.global_variables())
-        with tf.Session() as sess:              
+        with tf.Session() as sess:
+            print("Reading checkpoints...")
+            ckpt = tf.train.get_checkpoint_state(logs_train_dir)
+            if ckpt and ckpt.model_checkpoint_path:
+                global_step = ckpt.model_checkpoint_path.split('/')[-1].split('-')[-1]
+                saver.restore(sess,ckpt.model_checkpoint_path)
+                print("Loading success,global_step is %s" % global_step)
+            else:
+                print("no checkpoint file found")              
             coord = tf.train.Coordinator()
             threads = tf.train.start_queue_runners(sess=sess,coord = coord)
             try:
