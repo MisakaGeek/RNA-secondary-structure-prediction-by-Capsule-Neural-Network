@@ -60,8 +60,7 @@ def routing(input,b_IJ,num_outputs=3,num_dims=4):
                       initializer=tf.random_normal_initializer())
     biases=tf.get_variable('bias',
                            shape=[1,1,num_outputs,num_dims,1])
-        
-    
+          
     input=tf.tile(input,
                   [1,1,num_dims*num_outputs,1,1])
     
@@ -168,14 +167,12 @@ def interface(inputs,Y,batch_size,vec_len,temp_batch_size):
 
             b_IJ = tf.constant(np.zeros([temp_batch_size, digitcaps.shape[1].value, num_outputs, 1, 1], dtype=np.float32))
 
-
             digitcaps=routing(digitcaps,
                               b_IJ,
                               num_outputs=num_outputs,
                               num_dims=vec_len3)
             digitcaps = tf.squeeze(digitcaps, axis=1)
             
-    
     with tf.variable_scope('Masking'):
             #计算张量长度，并使用softmax
             #维度变化:[batch_size,3,4,1]->[batch_size,3,1,1]
@@ -202,8 +199,7 @@ def interface(inputs,Y,batch_size,vec_len,temp_batch_size):
                 masked_v=tf.multiply(tf.squeeze(digitcaps),tf.reshape(Y,(-1,3,1)))
                 
                 v_length=tf.sqrt(tf.reduce_mean(tf.square(digitcaps),axis=2,keep_dims=True)+1e-9)
-                
-                
+                              
     #全连接层解码部分,暂时添上，看看效果怎么样,以后可能会删掉
     #3层全连接层，最后一层为三个输出的全连接层
     #[batch_size,1,8,1]=>[batch_size,8]=>[batch_size,16]
@@ -234,8 +230,7 @@ def loss(logits,v_length,labels,Y,temp_batch_size):
     #1.(margin loss)
     # max_l = max(0, m_plus-||v_c||)^2
     m_plus=0.9
-    max_l = tf.square(tf.maximum(0., m_plus - v_length))
-    
+    max_l = tf.square(tf.maximum(0., m_plus - v_length)) 
     
     # max_r = max(0, ||v_c||-m_minus)^2
     m_minus=0.1
@@ -310,14 +305,3 @@ def evalution(logits,labels):
         accuracy = tf.reduce_mean(correct)
         #tf.summary.scalar(scope.name + '/accuracy',accuracy)
     return accuracy
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

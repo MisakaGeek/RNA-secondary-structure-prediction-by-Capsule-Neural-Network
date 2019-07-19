@@ -10,8 +10,6 @@ import tensorflow as tf
 import codecs
 import os
 
-
-
 def Get_Batch_Data(filepath):
     """
     批量读取一个文件夹里所有文件的数据
@@ -26,41 +24,29 @@ def Get_Batch_Data(filepath):
     bases=[]#保存第二列碱基序列信息，为ACGU字符串,每一个元素都是一个列表，保存一条序列的信息
     matches=[]#保存第五列配对信息，格式为int,每一个元素都是一个列表，保存一条序列的信息
     for file_name in pathDir:
-        f=codecs.open(filepath+str(file_name),mode='r')#打开一个文件
-        
+        f=codecs.open(filepath+str(file_name),mode='r')#打开一个文件   
         num=[]
         base=[]
         match=[]
-        
         line=f.readline()#读入一行
         while line:
             a=line.split()
-            
             #切片读取第1,2,5列的信息
             num.extend(a[0:1])
             base.extend(a[1:2])
             match.extend(a[4:5])
-            
             #读取下一行
             line=f.readline()
-        
         #去除无用数据
         num.remove(num[0])
         base.remove(base[0])
-       # match.remove(match[0])#找到BUG，错误地删除了第五列的第一个元素
-        
+        # match.remove(match[0])#找到BUG，错误地删除了第五列的第一个元素
         #添加到大列表中
         nums.append(num)
         bases.append(base)
         matches.append(match)
-        
         f.close()
     return nums,bases,matches
-
-
-
-
-
 
 def Change_to_String(nums,bases,matches):
     """
@@ -89,9 +75,7 @@ def Change_to_String(nums,bases,matches):
                 else:                # 配对的前一个碱基，用‘（’表示
                     stu.append('(')
         stus.append(stu)
-        
     return bases,stus
-
 
 #测试
 '''
@@ -106,22 +90,3 @@ if __name__ == "__main__":
     print(Bases[1])
     print(Bases[2])
 '''
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
