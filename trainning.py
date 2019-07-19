@@ -10,7 +10,6 @@ import os
 import numpy as np
 import tensorflow as tf
 import model
-import coding_matrix as cm
 import get_batch_data as gbd
 N_CLASSES=3
 IMG_H=19
@@ -30,7 +29,7 @@ def run_trainning():
     column = 128
     vec_len = 8
     temp_batch_size = 64
-    inputs, Labels= cm.get_Data(PATH=PATH,
+    inputs, Labels= gbd.get_Data(PATH=PATH,
                                   row=row,
                                   column=column)
 
