@@ -19,11 +19,11 @@ VEC_LEN = 8
 def evaluate():
     with tf.Graph().as_default():
         # 训练日志文件夹
-        logs_train_dir = '/'
+        logs_train_dir = "Net_model/"
         # 验证文件夹
-        verification_dir = "/"
+        verification_dir = "validation/"
         # 数据总数
-        n_test = 0
+        n_test = 717
         train, train_label = gbd.get_Data(verification_dir, ROW, COLUMN)
         train_X, train_Y, one_hot_train_Y = gbd.get_batch_data(train, train_label, batch_size = BATCH_SIZE)
         train_logits, train_v_length = model.interface(inputs = train_X,

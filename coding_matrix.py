@@ -74,7 +74,6 @@ def coding_matrix(bases):
     matrix=[]
     for each_base in bases:
         matrix.append(each_file_coding_matrix(each_base))
-    print(matrix)
     return matrix
 
 def each_file_coding_matrix(base):
