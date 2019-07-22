@@ -69,7 +69,7 @@ print(label.shape)
 def coding_matrix(bases):
     """
     此过程形成许多个编码矩阵，每个编码矩阵对应一个ct文件的RNA序列，使用循环调用each_file_coding_matrix方法遍历所有ct文件
-    bases是所有RNA序列所有信息，应为[[['A'],['G'],['C'],['C'],['G'],['U']],[['A'],['G'],['C'],['C'],['G'],['U']]]等类似格式
+    bases是所有RNA序列所有信息，应为[['A','G','C','C','G','U'],['A','G','C','C','G','U']]等类似格式
     """
     matrix=[]
     for each_base in bases:
@@ -79,7 +79,7 @@ def coding_matrix(bases):
 def each_file_coding_matrix(base):
     """
     此过程形成某个ct文件的编码矩阵，使用each_matrix_value子过程计算编码矩阵的具体数值
-    base是一条RNA序列所有信息，应为[['A'],['G'],['C'],['C'],['G']]等类似格式
+    base是一条RNA序列所有信息，应为['A','G','C','C','G']等类似格式
     """
     length = len(base)  # RNA序列长度
     array = np.zeros((length, length))
@@ -95,7 +95,7 @@ def each_file_coding_matrix(base):
 def each_matrix_value(base, i, j):
     """
     此过程最终形成矩阵上第i行第j列的数值，需要子过程init_value辅助计算权值
-    base是一条RNA序列所有信息，应为[['A'],['G'],['C'],['C'],['G']]等类似格式
+    base是一条RNA序列所有信息，应为['A','G','C','C','G']等类似格式
     i和j是两个整数，代表碱基在RNA序列base中的位置下标
     """
     weight = init_value(base, i, j)  # 编码矩阵第i行第j列的值，初始为0，如果配对，则赋值为配对权值
@@ -128,11 +128,11 @@ def init_value(base, i, j, U_G_Weight = 0.8):
     if (i < 0 or j < 0 or i >= len(base) or j >= len(base)):
         return 0
     else:
-        if (base[i] == ['A'] and base[j] == ['U']) or (base[i] == ['U'] and base[j] == ['A']):  # AU配对为2
+        if (base[i] == 'A' and base[j] == 'U') or (base[i] == 'U' and base[j] == 'A'):  # AU配对为2
             return 2
-        elif (base[i] == ['C'] and base[j] == ['G']) or (base[i] == ['G'] and base[j] == ['C']):  # CG配对为3
+        elif (base[i] == 'C' and base[j] == 'G') or (base[i] == 'G' and base[j] == 'C'):  # CG配对为3
             return 3
-        elif (base[i] == ['U'] and base[j] == ['G']) or (base[i] == ['G'] and base[j] == ['U']):  # UG配对为0到2随机实数
+        elif (base[i] == 'U' and base[j] == 'G') or (base[i] == 'G' and base[j] == 'U'):  # UG配对为0到2随机实数
             return U_G_Weight
         else:
             return 0
