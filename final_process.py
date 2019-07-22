@@ -1,7 +1,11 @@
 import numpy as np
 import webbrowser
+import pandas as pd
+import numpy as np
+import csv
 
-# import input_and_process_data as ipd
+
+import input_and_process_data as ipd
 
 '''
 输入：长度为n的list，每一项是一个（float，float，float）的元组
@@ -12,7 +16,12 @@ import webbrowser
      预测正确的碱基个数
      rna长度
 
-调用方法：final_pre = Nus_p(prediction, path)
+调用方法：
+         prediction = csv_to_prediction(PATH)
+         CSV为在test.py中保存结果的csv文件
+         PATH为配对概率文件CSV的准确路径名
+         
+         final_pre = Nus_p(prediction, path)
          final_pre为最终预测结果(点括号构成的序列)
 
          pre_match = change_to_match(final_pre)
@@ -155,20 +164,49 @@ def estimate(pre_match, matches):
         F1 = 2 * P * R / (P + R)
     return TP, FN, FP, R, P, F1
 
+#将CSV转换成prediction的函数，PATH为CSV的准确路径名如:C:\FileRecv\5s_Acetobacter-sp.-1\prediction.csv
+def csv_to_prediction(PATH):
+    data = pd.read_csv(PATH, sep=',',
+        header=0, index_col=0)
+    array_data = np.array(data)
+    list_data = array_data.tolist()
+    prediction = []
+    for list in list_data:
+        prediction.append(tuple(list))
+    return prediction
 
 # 利用ViennaRNA/forna提供的API在浏览器中显示图形化预测结果
 def open_in_webbrowser(final_pre, bases):
     seq = "".join(bases)
     stu = "".join(final_pre)
     url = 'http://nibiru.tbi.univie.ac.at/forna/forna.html?id=url/name&sequence=' + seq + '&structure=' + stu
+    #print(url)
     webbrowser.open(url)
 
 
 # 以下为测试用真实数据
 # path = ''
-bases = ['C', 'C', 'U', 'C', 'C', 'C',
+
+'''
+    对CT文件和运行得出的csv文件进行测试
+    
+prediction=csv_to_prediction(r'C:\Users\miemiemie\Documents\Tencent Files\1206198069\FileRecv\5s_Acetobacter-sp.-1\prediction.csv')
+nums, bases, matches = ipd.Get_Batch_Data(r'C:\Users\miemiemie\Documents\Tencent Files\1206198069\FileRecv\代码-CDPfold\data\5sRNA\5sRNA_ct\\')
+base = bases[0]
+matche = []
+for mat in matches[0]:
+    matche.append(int(mat))
+print(len(base),len(matche))
+print(matche)
+print(base)
+print(prediction)
+
+'''
+
+
+'''
+base = ['C', 'C', 'U', 'C', 'C', 'C',
          'U', 'U', 'G', 'G', 'G', 'G',
-         'U', 'A', 'C', 'A', 'G', 'C',
          'C', 'A', 'G', 'G', 'G', 'G',
          'A', 'G', 'G', 'C', 'U', 'G']
 prediction = [(1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0),
@@ -176,15 +214,17 @@ prediction = [(1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0),
               (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, 1),
               (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1),
               (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0)]
-matches = [27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 0, 0, 0, 0, 0, 0, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0]
-final_pre = Nus_p(prediction, bases)  # 正式运行时bases应该为path
+matche = [27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 0, 0, 0, 0, 0, 0, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0]
+final_pre = Nus_p(prediction, base)  # 正式运行时bases应该为path
 print(final_pre)
 pre_match = change_to_match(final_pre)
 print(pre_match)
-TP, FN, FP, R, P, F1 = estimate(pre_match, matches)  # 正式运行时matches应该为path
+print(len(final_pre),len(pre_match))
+TP, FN, FP, R, P, F1 = estimate(pre_match, matche)  # 正式运行时matches应该为path
 print('查全率：' + str(R))
 print('查准率：' + str(P))
 print('综合衡量：' + str(F1))
 print("将在浏览器中显示图形结果，请等待")
-open_in_webbrowser(final_pre, bases)
+open_in_webbrowser(final_pre, base)
 
+'''
