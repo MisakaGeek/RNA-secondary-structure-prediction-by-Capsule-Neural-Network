@@ -19,7 +19,6 @@ Example: test --- 5s_Acetobacter-sp.-1 --- 5s_Acetobacter-sp.-1.ct
               --- 5s_Acidithiobacillus-ferrooxidans-2 --- 5s_Acidithiobacillus-ferrooxidans-2.ct
               ...
 '''
-
 """
 流程：读取含有一个ct文件的文件夹，将这个ct文件输入神经网络，获取RNA二级结构预测结果，在对应文件夹内输出prediction.csv文件，即为二级结构预测结果
 """
