@@ -3,7 +3,7 @@
 Created on Wed Jul 17 15:27:45 2019
 
 @author: 孙博文
-计算一个碱基输入神经网络返回的判断结果，将其进行softmax处理并返回，用于test.py
+计算一个碱基输入神经网络返回的判断结果，将其进行softmax处理并返回，用于test2.py
 """
 import numpy as np
 import tensorflow as tf
@@ -12,21 +12,19 @@ import get_batch_data as gbd
 
 ROW = 19
 COLUMN = 128
-#BATCH_SIZE = 1 # 调用第一版代码时把这个变量注释掉
+BATCH_SIZE = 1 
 VEC_LEN = 8
 logs_train_dir = "Net_model/" # 训练日志文件夹
-def evaluate_one_base(ct, BATCH_SIZE): # 第一版函数声明
-#def evaluate_one_base(train, train_label): # 第二版函数声明
-#def evaluate_one_base(ct): # 第三版函数声明
+def evaluate_one_base(ct):
     """
     返回一个碱基的各部位对应(.)的概率
     input:
         ct: 文件夹，内部应只有一个ct文件，多了后果自负
     outputs:
-        prediction: 二维张量，第一维batch_size=碱基数；第二维索引数3，对应该部位为（ . ）的概率
+        prediction: 二维张量，第一维batch_size=1；第二维索引数3，对应该部位为（ . ）的概率
     """
     with tf.Graph().as_default():
-        train, train_label = gbd.get_Data(ct, ROW, COLUMN) # 第一、二版用此代码，第三版请注释掉此行
+        train, train_label = gbd.get_Data(ct, ROW, COLUMN)
         train_X, train_Y, one_hot_train_Y = gbd.get_batch_data(train, train_label, batch_size = BATCH_SIZE)
         train_logits, train_v_length = model.interface(inputs = train_X,
                                                 Y = one_hot_train_Y,
