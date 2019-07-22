@@ -6,9 +6,4 @@ All_Clearn_Data
 Net_model
 test
 validation
-__pycache__/coding_matrix.cpython-37.pyc
-__pycache__/data_same_size.cpython-37.pyc
-__pycache__/input_and_process_data.cpython-37.pyc
-__pycache__/model.cpython-37.pyc
-__pycache__/get_batch_data.cpython-37.pyc
-__pycache__/validation_one_base.cpython-37.pyc
+__pycache__

@@ -9,6 +9,7 @@ import validation_one_base as vob
 import input_and_process_data as ipd
 import coding_matrix as cm
 import data_same_size as dss
+import final_process as fp
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -39,11 +40,28 @@ for ct in testDir: # ct是文件夹，内部有且仅有一个.ct格式的碱基
         headline = f.readline() # 标题行，写入每一个文件中
         length = int(headline.split()[0])
     result = vob.evaluate_one_base(work_dir, length)
-    prediction = pd.DataFrame(columns = name, data = result)
-    prediction.to_csv(work_dir + "test.csv") # prediction.csv保存各个位置是左括号，右括号，点的概率
+    #prediction = pd.DataFrame(columns = name, data = result)
+    #prediction.to_csv(work_dir + "test.csv") # prediction.csv保存各个位置是左括号，右括号，点的概率
+
+    result_list = []
+    for i in result:
+        temp_result = i[0], i[1], i[2]
+        result_list.append(temp_result)
+    nums, bases, matches = ipd.Get_Batch_Data(work_dir)
+    final_pre = fp.Nus_p(result_list, bases[0])
+    pre_match = fp.change_to_match(final_pre)
+    match = []
+    for mat in matches[0]:
+        match.append(int(mat))
+    TP, FN, FP, R, P, F1 = fp.estimate(pre_match, match)
+    print('查全率：' + str(R))
+    print('查准率：' + str(P))
+    print('综合衡量：' + str(F1))
+    #print("将在浏览器中显示图形结果，请等待")
+    #fp.open_in_webbrowser(final_pre, bases[0])
 '''
 '''
-# 第二版：为每个碱基建立新文件夹和专属ct文件，奇慢无比
+# 第二版：为每个碱基建立新文件夹和专属ct文件，有大量文件操作，奇慢无比，但是准确率意外地高于第三版
 for ct in testDir:
     work_dir = test_data_path + '/' + ct + '/'
     for file_name in os.listdir(work_dir):
@@ -66,11 +84,23 @@ for ct in testDir:
         result_list.append(result)
         os.remove(work_dir + index + '/' + index + '.ct')
         os.rmdir(work_dir + index)
-    prediction = pd.DataFrame(columns = name, data = result_list)
-    prediction.to_csv(work_dir + "prediction.csv")
+    #prediction = pd.DataFrame(columns = name, data = result_list)
+    #prediction.to_csv(work_dir + "prediction.csv")
+    
+    final_pre = fp.Nus_p(result_list, bases[0])
+    pre_match = fp.change_to_match(final_pre)
+    match = []
+    for mat in matches[0]:
+        match.append(int(mat))
+    TP, FN, FP, R, P, F1 = fp.estimate(pre_match, match)
+    print('查全率：' + str(R))
+    print('查准率：' + str(P))
+    print('综合衡量：' + str(F1))
+    #print("将在浏览器中显示图形结果，请等待")
+    #fp.open_in_webbrowser(final_pre, bases[0])
 '''
-
-# 第三版：将一个ct文件拆分，仿佛其是由多个只含有一个碱基的ct文件得来（实际上从同一文件读入，节约了文件操作时间）
+'''
+# 第三版：将一个ct文件拆分，仿佛其是由多个只含有一个碱基的ct文件得来（实际上从同一文件读入，节约了文件操作时间），但是准确率低于第二版
 for ct in testDir:
     result_list = [] # n*3大小的二维list，n行代表输入的ct文件有n个碱基，3代表每个碱基应该是左括号，右括号，点的概率
     work_dir = test_data_path + '/' + ct + '/'
@@ -117,4 +147,17 @@ for ct in testDir:
         result = temp_result[0][0], temp_result[0][1], temp_result[0][2]
         result_list.append(result)
     prediction = pd.DataFrame(columns = name, data = result_list)
-    prediction.to_csv(work_dir + "prediction.csv")
+    #prediction.to_csv(work_dir + "prediction.csv")
+
+    final_pre = fp.Nus_p(result_list, bases_data[0])
+    pre_match = fp.change_to_match(final_pre)
+    match = []
+    for mat in matches_data[0]:
+        match.append(int(mat))
+    TP, FN, FP, R, P, F1 = fp.estimate(pre_match, match)
+    print('查全率：' + str(R))
+    print('查准率：' + str(P))
+    print('综合衡量：' + str(F1))
+    #print("将在浏览器中显示图形结果，请等待")
+    #fp.open_in_webbrowser(final_pre, bases[0])
+'''

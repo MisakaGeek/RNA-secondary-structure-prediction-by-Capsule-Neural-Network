@@ -188,23 +188,6 @@ def open_in_webbrowser(final_pre, bases):
 # path = ''
 
 '''
-    对CT文件和运行得出的csv文件进行测试
-    
-prediction=csv_to_prediction(r'C:\Users\miemiemie\Documents\Tencent Files\1206198069\FileRecv\5s_Acetobacter-sp.-1\prediction.csv')
-nums, bases, matches = ipd.Get_Batch_Data(r'C:\Users\miemiemie\Documents\Tencent Files\1206198069\FileRecv\代码-CDPfold\data\5sRNA\5sRNA_ct\\')
-base = bases[0]
-matche = []
-for mat in matches[0]:
-    matche.append(int(mat))
-print(len(base),len(matche))
-print(matche)
-print(base)
-print(prediction)
-
-'''
-
-
-'''
 base = ['C', 'C', 'U', 'C', 'C', 'C',
          'U', 'U', 'G', 'G', 'G', 'G',
          'C', 'A', 'G', 'G', 'G', 'G',
